@@ -1,0 +1,8 @@
+Package: telegraf
+Version: 0.12.0-1
+Architecture: armhf
+Maintainer: support@influxdb.com
+Section: default
+Priority: extra
+Homepage: influxdb.com
+Description: Metrics collector

@@ -1,0 +1,8 @@
+Package: influxdb
+Version: 0.12.1-1
+Architecture: armhf
+Maintainer: support@influxdb.com
+Section: default
+Priority: extra
+Homepage: influxdb.com
+Description: Distributed time-series database

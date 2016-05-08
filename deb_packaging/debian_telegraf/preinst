@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Copy existing configuration if pre-existing installation is found
+test -f /etc/opt/telegraf/telegraf.conf
+if [ $? -eq 0 ]; then
+    mkdir /etc/telegraf
+    cp -a /etc/opt/telegraf/* /etc/telegraf/
+fi
+
+exit

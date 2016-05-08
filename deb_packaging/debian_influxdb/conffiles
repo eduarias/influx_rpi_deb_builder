@@ -1,0 +1,2 @@
+/etc/influxdb/influxdb.conf
+/etc/logrotate.d/influxdb

@@ -1,0 +1,15 @@
+## Basic steps to package a deb file based on:
+# http://ubuntuforums.org/showthread.php?t=910717
+
+rm -rf $TEMP_FOLDER
+rm -f $DEB_PACKAGE
+mkdir -p $TEMP_FOLDER
+wget $URL_BASE$FILE -P $TEMP_FOLDER
+mkdir -p $TEMP_FOLDER/DEBIAN
+cp -v $DEBIAN_FOLDER/* $TEMP_FOLDER'DEBIAN/'
+#cd $TEMP_FOLDER
+tar xvzf $TEMP_FOLDER/$FILE -C $TEMP_FOLDER
+echo dpkg-deb --build $TEMP_FOLDER
+dpkg-deb --build $TEMP_FOLDER
+mv /tmp/$DEB_PACKAGE .
+rm -rf $TEMP_FOLDER

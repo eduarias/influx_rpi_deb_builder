@@ -1,0 +1,46 @@
+#!/bin/sh
+BIN_DIR=/usr/bin
+DATA_DIR=/var/lib/telegraf
+LOG_DIR=/var/log/telegraf
+SCRIPT_DIR=/usr/lib/telegraf/scripts
+LOGROTATE_DIR=/etc/logrotate.d
+CONFIG_DIR=/etc/telegraf/telegraf.d
+
+if ! id telegraf >/dev/null 2>&1; then
+        useradd --system -U -M telegraf -s /bin/false -d $DATA_DIR
+fi
+chmod a+rX $BIN_DIR/telegraf*
+
+mkdir -p $LOG_DIR
+chown -R -L telegraf:telegraf $LOG_DIR
+mkdir -p $DATA_DIR
+chown -R -L telegraf:telegraf $DATA_DIR
+mkdir -p $CONFIG_DIR
+chown -R -L telegraf:telegraf $CONFIG_DIR
+
+test -f /etc/default/telegraf || touch /etc/default/telegraf
+
+# Remove legacy logrotate file
+test -f $LOGROTATE_DIR/telegraf && rm -f $LOGROTATE_DIR/telegraf
+
+# Remove legacy symlink
+test -h /etc/init.d/telegraf && rm -f /etc/init.d/telegraf
+
+# Systemd
+if which systemctl > /dev/null 2>&1 ; then
+    cp $SCRIPT_DIR/telegraf.service /lib/systemd/system/telegraf.service
+    systemctl enable telegraf
+
+# Sysv
+else
+    cp -f $SCRIPT_DIR/init.sh /etc/init.d/telegraf
+    chmod +x /etc/init.d/telegraf
+    if which update-rc.d > /dev/null 2>&1 ; then
+        update-rc.d -f telegraf remove
+        update-rc.d telegraf defaults
+    else
+        chkconfig --add telegraf
+    fi
+fi
+
+exit
